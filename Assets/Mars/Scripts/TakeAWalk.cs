@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class TakeAWalk : MonoBehaviour {
 
+    public Transform TakeAWalkObject;
     public Transform[] TargetList;
     public bool[] IsCenter;
     public float Speed = 1.0f;
@@ -17,10 +18,10 @@ public class TakeAWalk : MonoBehaviour {
 
     private bool IsArrive {
         get {
-            return (transform.position.x < TargetTf.position.x + 1) &&
-                (transform.position.x > TargetTf.position.x - 1) &&
-                (transform.position.z < TargetTf.position.z + 1) &&
-                (transform.position.z > TargetTf.position.z - 1);
+            return (TakeAWalkObject.position.x < TargetTf.position.x + 1) &&
+                (TakeAWalkObject.position.x > TargetTf.position.x - 1) &&
+                (TakeAWalkObject.position.z < TargetTf.position.z + 1) &&
+                (TakeAWalkObject.position.z > TargetTf.position.z - 1);
         }
     }
 
@@ -48,14 +49,17 @@ public class TakeAWalk : MonoBehaviour {
 	void Update () {
         if(!IsEnd) {
             if((CenterTf != null) && IsCenter[TargetNum - 1]) {
-                transform.RotateAround(CenterTf.position, Vector3.up, - Speed / Mathf.PI / 1.5f);
+                TakeAWalkObject.RotateAround(CenterTf.position, Vector3.up, - Speed / Mathf.PI / 1.5f);
             } else {
-                transform.position = Vector3.MoveTowards(transform.position, TargetTf.position, Speed);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, TargetTf.rotation, AngleSpeed);
+                TakeAWalkObject.position = Vector3.MoveTowards(TakeAWalkObject.position, TargetTf.position, Speed);
+                TakeAWalkObject.rotation = Quaternion.RotateTowards(TakeAWalkObject.rotation, TargetTf.rotation, AngleSpeed);
             }           
             CheckArrive();
         }
-	}
+        if(Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }           
+    }
 
     private void CheckArrive() {
         if(IsArrive) {
@@ -75,8 +79,8 @@ public class TakeAWalk : MonoBehaviour {
     }
 
     private void CalculateAngularSpeed() {
-        float TargetAngle = Quaternion.Angle(transform.rotation, TargetTf.rotation);
-        float TargetDistance = Vector3.Distance(transform.position, TargetTf.position);
+        float TargetAngle = Quaternion.Angle(TakeAWalkObject.rotation, TargetTf.rotation);
+        float TargetDistance = Vector3.Distance(TakeAWalkObject.position, TargetTf.position);
         AngleSpeed = TargetAngle / (TargetDistance / Speed);
     }
 
