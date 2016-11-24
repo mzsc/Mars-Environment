@@ -2,7 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
+public delegate void MethodtDelegate();
+
 public class TakeAWalk : MonoBehaviour {
+
+    public static event MethodtDelegate TakeAWalkStopEvent;
 
     public Transform TakeAWalkObject;
     public Transform[] TargetList;
@@ -14,7 +18,7 @@ public class TakeAWalk : MonoBehaviour {
     private Transform CenterTf;
     private int TargetCount;
     private int TargetNum;
-    private bool IsEnd;
+    private bool IsEnd = true;
 
     private bool IsArrive {
         get {
@@ -25,7 +29,7 @@ public class TakeAWalk : MonoBehaviour {
         }
     }
 
-    void Awake() {
+    public void StartTakeAWalk() {
         TargetCount = TargetList.Length;
         TargetNum = 0;
         if(TargetCount > 0) {
@@ -36,17 +40,22 @@ public class TakeAWalk : MonoBehaviour {
             IsEnd = true;
             Debug.LogError("TargetList Null!!!");
         }
-
     }
 
+    public void PauseTakeAWalk() {
+        IsEnd = true;
+    }
 
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    public void ContinueTakeAWalk() {
+        IsEnd = false;
+    }
+
+    public void StopTakeAWalk() {
+        IsEnd = true;
+        TakeAWalkStopEvent();
+    }
+
+    void Update () {
         if(!IsEnd) {
             if((CenterTf != null) && IsCenter[TargetNum - 1]) {
                 TakeAWalkObject.RotateAround(CenterTf.position, Vector3.up, - Speed / Mathf.PI / 1.5f);
@@ -74,6 +83,7 @@ public class TakeAWalk : MonoBehaviour {
                 CalculateAngularSpeed();
             } else {
                 IsEnd = true;
+                TakeAWalkStopEvent();
             }
         }
     }
