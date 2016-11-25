@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TakeAWalkObject: {fileID: 0}
-  OriginTf: {fileID: 0}
+  OriginTf: {fileID: 4000010843076070}
   TargetList:
   - {fileID: 4000013285541246}
   - {fileID: 4000010237710688}
