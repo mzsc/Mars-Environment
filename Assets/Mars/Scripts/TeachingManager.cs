@@ -12,6 +12,7 @@ public class TeachingManager : MonoBehaviour {
     public Button DustBtn;//尘暴
     public Button SpyeyeBtn;//鸟览
     public Text TeachingLable;
+    public GameObject SpyeyeLabel;
 
     private string TargetName;
     private string TargetId;
@@ -19,6 +20,7 @@ public class TeachingManager : MonoBehaviour {
     void Awake() {
         gameObject.SetActive(false);
         TeachingLable.gameObject.SetActive(false);
+        SpyeyeLabel.SetActive(false);
         TakeAWalk.TakeAWalkStopEvent += ShowPanel;
         ToTheTarget.ArriveTargetEvent += ShowLable;
     }
@@ -33,13 +35,18 @@ public class TeachingManager : MonoBehaviour {
     }
 
     private void ShowLable() {
-        TeachingLable.gameObject.SetActive(true);
-        TeachingLable.text = TargetName;
+        if(TargetId == "Spyeye") {
+            SpyeyeLabel.SetActive(true);
+        } else {
+            TeachingLable.gameObject.SetActive(true);
+            TeachingLable.text = TargetName;
+        }     
     }
 
     public void OnClickButton(string SceneName) {
         TargetId = SceneName;
         TargetName = TeachingControl.MoveToTarget(TargetId);
         TeachingLable.gameObject.SetActive(false);
+        SpyeyeLabel.SetActive(false);
     }
 }
